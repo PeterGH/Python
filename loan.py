@@ -1,3 +1,5 @@
+from decimal import *
+
 class Loan:
 
     def __init__(self, principal, interest_rate, months):
@@ -26,11 +28,12 @@ class Loan:
         monthly_principal = []
         monthly_interest = []
         monthly_balance = []
-        balance = self.principal
+        fraction = 8
+        balance = round(self.principal, fraction)
         for i in month:
-            interest = balance * self.monthly_rate
-            principal = self.monthly_payment - interest
-            balance = balance - principal
+            interest = round(balance * self.monthly_rate, fraction)
+            principal = round(self.monthly_payment - interest, fraction)
+            balance = round(balance - principal, fraction)
             monthly_principal.append(principal)
             monthly_interest.append(interest)
             monthly_balance.append(balance)
@@ -39,8 +42,8 @@ class Loan:
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("-P", "--Principal", help="Loan ammount", type=float)
-    parser.add_argument("-I", "--InterestRate", help="Interest rate", type=float)
+    parser.add_argument("-P", "--Principal", help="Loan ammount", type=Decimal)
+    parser.add_argument("-I", "--InterestRate", help="Interest rate", type=Decimal)
     parser.add_argument("-M", "--Months", help="Number of months to pay off the loan", type=int)
     args = parser.parse_args()
     print(f"Principal: {args.Principal}")
