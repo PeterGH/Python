@@ -22,8 +22,19 @@ class Loan:
         return self.monthly_payment
 
     def amortization_schedule(self):
-        pass
-
+        month = list(range(1,self.months+1))
+        monthly_principal = []
+        monthly_interest = []
+        monthly_balance = []
+        balance = self.principal
+        for i in month:
+            interest = balance * self.monthly_rate
+            principal = self.monthly_payment - interest
+            balance = balance - principal
+            monthly_principal.append(principal)
+            monthly_interest.append(interest)
+            monthly_balance.append(balance)
+        return month, monthly_principal, monthly_interest, monthly_balance
 
 if __name__ == "__main__":
     import argparse
@@ -38,3 +49,8 @@ if __name__ == "__main__":
     loan = Loan(args.Principal, args.InterestRate, args.Months)
     payment = loan.get_monthly_payment()
     print(f"Monthly Payment: {payment}")
+    print("Amortization Schedule:")
+    month, principal, interest, balance = loan.amortization_schedule()
+    print("month\tprincipal\tinterest\tbalance")
+    for i in range(len(month)):
+        print(f"{month[i]}\t{principal[i]}\t{interest[i]}\t{balance[i]}")
