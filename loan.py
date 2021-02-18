@@ -3,21 +3,18 @@ from math import log
 
 class Loan:
 
-    def __init__(self, principal, interest_rate, months):
+    def __init__(self, principal, interest_rate, months=0, monthly_payment=0):
         self.principal = principal
         self.interest_rate = interest_rate
         self.monthly_rate = self.interest_rate / 12
-        self.months = months
-        self.monthly_payment = self.__monthly_payment()
-        self.total_payment = self.months * self.monthly_payment
-        self.total_interest = self.total_payment - self.principal
-
-    def __init__(self, principal, interest_rate, monthly_payment):
-        self.principal = principal
-        self.interest_rate = interest_rate
-        self.monthly_rate = self.interest_rate / 12
-        self.monthly_payment = monthly_payment
-        self.months = self.__months()
+        if months != 0:
+            self.months = months
+            self.monthly_payment = self.__monthly_payment()
+        elif monthly_payment != 0:
+            self.monthly_payment = monthly_payment
+            self.months = self.__months()
+        else:
+            raise ValueError("Must provide months or monthly_payment")
         self.total_payment = self.months * self.monthly_payment
         self.total_interest = self.total_payment - self.principal
 
@@ -85,9 +82,9 @@ if __name__ == "__main__":
     if args.Months == 0 and args.MonthlyPayment == 0:
         sys.exit("Must provide --Months or --MonthlyPayment")
     if args.Months != 0:
-        loan = Loan(args.Principal, args.InterestRate, args.Months)
+        loan = Loan(args.Principal, args.InterestRate, months=args.Months)
     elif args.MonthlyPayment != 0:
-        loan = Loan(args.Principal, args.InterestRate, args.MonthlyPayment)
+        loan = Loan(args.Principal, args.InterestRate, monthly_payment=args.MonthlyPayment)
     months = loan.get_months()
     print(f"Months: {months}")
     payment = loan.get_monthly_payment()
