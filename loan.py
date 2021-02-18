@@ -57,8 +57,12 @@ class Loan:
         monthly_principal = []
         monthly_interest = []
         monthly_balance = []
+        accumulate_principal = []
+        accumulate_interest = []
         fraction = 8
         balance = round(self.principal, fraction)
+        a_principal= 0
+        a_interest = 0
         for i in month:
             interest = round(balance * self.monthly_rate, fraction)
             principal = round(self.monthly_payment - interest, fraction)
@@ -66,7 +70,11 @@ class Loan:
             monthly_principal.append(principal)
             monthly_interest.append(interest)
             monthly_balance.append(balance)
-        return month, monthly_principal, monthly_interest, monthly_balance
+            a_principal += principal
+            accumulate_principal.append(a_principal)
+            a_interest += interest
+            accumulate_interest.append(a_interest)
+        return month, monthly_principal, monthly_interest, monthly_balance,accumulate_principal,accumulate_interest
 
 if __name__ == "__main__":
     import argparse
@@ -94,7 +102,7 @@ if __name__ == "__main__":
     total_interest = loan.get_total_interest()
     print(f"Total Interest: {total_interest}")
     print("Amortization Schedule:")
-    month, principal, interest, balance = loan.amortization_schedule()
-    print("month\tprincipal\tinterest\tbalance")
+    month, principal, interest, balance, total_principal, total_interest = loan.amortization_schedule()
+    print("month\tprincipal\tinterest\tbalance\ttotal_principal\ttotal_interest")
     for i in range(len(month)):
-        print(f"{month[i]}\t{principal[i]}\t{interest[i]}\t{balance[i]}")
+        print(f"{month[i]}\t{principal[i]}\t{interest[i]}\t{balance[i]}\t{total_principal[i]}\t{total_interest[i]}")
